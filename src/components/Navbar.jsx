@@ -6,7 +6,10 @@ const Navbar = ({ activeSection, setActiveSection }) => {
     localStorage.getItem("theme") ? localStorage.getItem("theme") : "dark"
   );
 
-  // 2. Toggle theme logic
+  // 2. Mobile Menu State (Added this for phone navigation)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // 3. Toggle theme logic
   useEffect(() => {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -34,11 +37,14 @@ const Navbar = ({ activeSection, setActiveSection }) => {
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-white/70 dark:bg-[#0f172a]/80 backdrop-blur-lg shadow-sm z-50 transition-colors duration-500 border-b border-transparent dark:border-gray-800">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center relative">
         
-        {/* Logo - Clicking this takes you Home */}
+        {/* Logo - Clicking this takes you Home and closes mobile menu */}
         <div 
-          onClick={() => setActiveSection('home')}
+          onClick={() => {
+            setActiveSection('home');
+            setIsMobileMenuOpen(false);
+          }}
           className="text-xl font-bold text-gray-800 dark:text-white transition-colors cursor-pointer"
         >
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-cyan-400">Raja</span> Kumar
@@ -70,6 +76,7 @@ const Navbar = ({ activeSection, setActiveSection }) => {
         {/* Right Side Elements */}
         <div className="flex items-center space-x-4">
           
+          {/* Theme Toggle Button */}
           <button 
             onClick={toggleTheme} 
             className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition text-gray-800 dark:text-yellow-400 shadow-sm"
@@ -78,6 +85,7 @@ const Navbar = ({ activeSection, setActiveSection }) => {
             {theme === 'light' ? '🌙' : '☀️'}
           </button>
 
+          {/* Desktop Resume Button */}
           <a 
             href="/RajaKumarCSE.pdf" 
             download="Raja_Kumar_Resume.pdf"
@@ -86,15 +94,61 @@ const Navbar = ({ activeSection, setActiveSection }) => {
             Download Resume
           </a>
 
-          {/* Mobile Menu Icon */}
+          {/* Mobile Menu Icon (Hamburger / Close) */}
           <div className="md:hidden flex items-center">
-            <button className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-cyan-400 focus:outline-none transition-colors">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-cyan-400 focus:outline-none transition-colors"
+            >
+              {isMobileMenuOpen ? (
+                // 'X' Icon when menu is open
+                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                // Hamburger Icon when menu is closed
+                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
             </button>
           </div>
 
+        </div>
+      </div>
+
+      {/* MOBILE DROPDOWN MENU */}
+      <div 
+        className={`md:hidden absolute top-full left-0 w-full bg-white dark:bg-[#0f172a] border-b border-gray-200 dark:border-gray-800 shadow-lg transition-all duration-300 overflow-hidden ${
+          isMobileMenuOpen ? "max-h-96 opacity-100 py-4" : "max-h-0 opacity-0 py-0"
+        }`}
+      >
+        <div className="flex flex-col items-center space-y-4 px-6">
+          {navLinks.map((item) => (
+            <button 
+              key={item.id} 
+              onClick={() => {
+                setActiveSection(item.id);
+                setIsMobileMenuOpen(false); // Closes menu after you click a link
+              }} 
+              className={`text-lg font-medium w-full text-center py-2 rounded-lg transition-colors ${
+                activeSection === item.id 
+                ? "text-blue-600 dark:text-cyan-400 bg-blue-50 dark:bg-slate-800" 
+                : "text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-cyan-400"
+              }`}
+            >
+              {item.name}
+            </button>
+          ))}
+          
+          {/* Mobile Resume Button */}
+          <a 
+            href="/RajaKumarCSE.pdf" 
+            download="Raja_Kumar_Resume.pdf"
+            className="w-full text-center mt-2 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white px-6 py-3 rounded-lg font-medium shadow-md transition-all active:scale-95"
+          >
+            Download Resume
+          </a>
         </div>
       </div>
     </nav>
