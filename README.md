@@ -2,7 +2,7 @@
 
 Welcome to the repository of my personal portfolio website! This is a modern, fully responsive, and highly interactive web application built to showcase my projects, technical skills, and professional experience.
 
-**🔗 [View Live Portfolio Here](YOUR_LIVE_LINK_HERE_AFTER_DEPLOYMENT)**
+**🔗 [View Live Portfolio Here](https://rajakumarportfolio.netlify.app)**
 
 ---
 
@@ -31,7 +31,6 @@ Welcome to the repository of my personal portfolio website! This is a modern, fu
 
 Here is a quick look at the file structure of this project:
 
-```text
 my-portfolio/
 ├── public/                 # Static assets (Resume PDF, Favicon, etc.)
 ├── src/
